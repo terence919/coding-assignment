@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\CodingAssignmentApp\CodingAssignmentApp.csproj" />
       <ProjectReference Include="..\..\src\CodingAssignmentLib\CodingAssignmentLib.csproj" />
     </ItemGroup>
 
