@@ -36,7 +36,7 @@ namespace CodingAssignment
             } while (true);
         }
         
-        public static List<(List<Data>? DataList, string FileName)> GetAllDataList(string filePath)
+        public static List<string> GetAllFilesName(string filePath)
         {
             try
             {
@@ -46,15 +46,7 @@ namespace CodingAssignment
                     .Where(file => searchPatterns.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase))
                     .ToList();
 
-                return files
-                    .Select(file =>
-                    {
-                        var marker = "data" + Path.DirectorySeparatorChar; 
-                        var index = file.LastIndexOf(marker, StringComparison.OrdinalIgnoreCase);
-                        var relativePath = file.Substring(index);
-                        return (DataList: GetDataList(file)?.ToList(), FileName: relativePath);
-                    })
-                    .ToList();
+                return files;
             }
             catch (Exception e)
             {
@@ -63,19 +55,22 @@ namespace CodingAssignment
             }
         }
 
-        public static string DisplaySearchInfo(string inputKey,  List<(List<Data>? DataList, string FileName)> allDataList)
+        public static string DisplaySearchInfo(string inputKey,  List<string> filesNames)
         {
-            var found = allDataList
-                .SelectMany(dataList => dataList.DataList!
-                    .Where(data => string.Equals(data.Key, inputKey.Trim(), StringComparison.OrdinalIgnoreCase))
-                    .Select(data => (Key: data.Key, Value: data.Value, FileName: dataList.FileName)))
-                .FirstOrDefault();
-
-            if (found.Key == null && found.Value == null)
+            foreach (var file in filesNames)
             {
-                return "Search not found.";
+                var dataList = GetDataList(file);
+                var foundData = dataList.FirstOrDefault(data =>
+                    !string.IsNullOrEmpty(data.Key) &&
+                    string.Equals(data.Key, inputKey.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                if (string.IsNullOrEmpty(foundData.Key)) continue;
+                var marker = "data" + Path.DirectorySeparatorChar; 
+                var index = file.LastIndexOf(marker, StringComparison.OrdinalIgnoreCase);
+                var relativePath = file.Substring(index);
+                return $"Key:{foundData.Key} Value:{foundData.Value} FileName:{relativePath}";
             }
-            return $"Key:{found.Key} Value:{found.Value} FileName:{found.FileName}";
+            return "Search not found.";
         }
 
         public static IEnumerable<Data> GetDataList(string fileName)
@@ -118,13 +113,13 @@ namespace CodingAssignment
         private static void Search()
         {
             var filePath = Path.Combine(GetRootPath(), "data");
-            var allDataList = GetAllDataList(filePath);
+            var filesNames = GetAllFilesName(filePath);
     
             Console.WriteLine("Enter the key to search.");
     
             var inputKey = Console.ReadLine()!;
-            var displayInfo = DisplaySearchInfo(inputKey, allDataList); 
-    
+            var displayInfo = DisplaySearchInfo(inputKey, filesNames); 
+            
             Console.WriteLine($"{displayInfo}");
         }
 

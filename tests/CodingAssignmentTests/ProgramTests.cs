@@ -28,21 +28,15 @@ public class ProgramTests
     public void GetAllDataList_ReturnsData()
     {
         var filePath = Path.Combine(_rootPath, "MockData", "data");
-        var allDataList = CodingAssignment.Program.GetAllDataList(filePath);
+        var allDataList = CodingAssignment.Program.GetAllFilesName(filePath);
         Assert.That(allDataList.Count, Is.EqualTo(3));
-        Assert.That(allDataList[0].DataList?[0].Key, Is.EqualTo("aaa"));
-        Assert.That(allDataList[0].DataList?[0].Value, Is.EqualTo("bbb"));
-        Assert.That(allDataList[1].DataList?[1].Key, Is.EqualTo("Hhh"));
-        Assert.That(allDataList[1].DataList?[1].Value, Is.EqualTo("555"));
-        Assert.That(allDataList[2].DataList?[0].Key, Is.EqualTo("aBc"));
-        Assert.That(allDataList[2].DataList?[0].Value, Is.EqualTo("123"));
     }
     
     [Test]
     public void GetAllDataList_Invalid_FilePath_Returns_EmptyList()
     {
         var filePath = Path.Combine(_rootPath, "MockData", "data2");
-        var allDataList = CodingAssignment.Program.GetAllDataList(filePath);
+        var allDataList = CodingAssignment.Program.GetAllFilesName(filePath);
         Assert.That(allDataList.Count, Is.EqualTo(0));
     }
     
@@ -50,7 +44,7 @@ public class ProgramTests
     public void DisplaySearchInfo_ReturnsInfo()
     {
         var filePath = Path.Combine(_rootPath, "MockData", "data");
-        var allDataList = CodingAssignment.Program.GetAllDataList(filePath);
+        var allDataList = CodingAssignment.Program.GetAllFilesName(filePath);
         var searchJsonInfo = CodingAssignment.Program.DisplaySearchInfo("abc ", allDataList);
         Assert.That(searchJsonInfo, Is.EqualTo("Key:aBc Value:123 FileName:data/data2.json"));
         var searchCsvInfo = CodingAssignment.Program.DisplaySearchInfo("aaa ", allDataList);
@@ -63,10 +57,10 @@ public class ProgramTests
     public void DisplaySearchInfo_InvalidKey_ReturnsInfo()
     {
         var filePath = Path.Combine(_rootPath, "MockData", "data");
-        var allDataList = CodingAssignment.Program.GetAllDataList(filePath);
-        var searchInvalidKey = CodingAssignment.Program.DisplaySearchInfo("abcd", allDataList);
+        var filesName = CodingAssignment.Program.GetAllFilesName(filePath);
+        var searchInvalidKey = CodingAssignment.Program.DisplaySearchInfo("abcd", filesName);
         Assert.That(searchInvalidKey, Is.EqualTo("Search not found."));
-        var searchEmptyInfo = CodingAssignment.Program.DisplaySearchInfo(" ", allDataList);
+        var searchEmptyInfo = CodingAssignment.Program.DisplaySearchInfo(" ", filesName);
         Assert.That(searchEmptyInfo, Is.EqualTo("Search not found."));
     }
     
