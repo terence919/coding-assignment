@@ -1,10 +1,11 @@
-﻿using CodingAssignmentLib.Abstractions;
+﻿using System.IO.Abstractions;
+using CodingAssignmentLib.Abstractions;
 
 namespace CodingAssignmentLib;
 
-public class CsvContentParser : IContentParser
+public class CsvContentParser : ContentParserBase
 {
-    public IEnumerable<Data> Parse(string content)
+    public override IEnumerable<Data> Parse(string content)
     {
         return content.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(line =>
         {

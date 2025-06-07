@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace CodingAssignmentLib;
 
-public class JsonContentParser: IContentParser
+public class JsonContentParser: ContentParserBase
 {
-    public IEnumerable<Data> Parse(string content)
+    public override IEnumerable<Data> Parse(string content)
     {
         var data = JsonConvert.DeserializeObject<List<Data>>(content);
         foreach (var item in data!)

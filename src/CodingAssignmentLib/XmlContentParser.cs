@@ -3,9 +3,9 @@ using CodingAssignmentLib.Abstractions;
 
 namespace CodingAssignmentLib;
 
-public class XmlContentParser : IContentParser
+public class XmlContentParser : ContentParserBase
 {
-    public IEnumerable<Data> Parse(string content)
+    public override IEnumerable<Data> Parse(string content)
     {
         var doc = XDocument.Parse(content);
         return doc.Descendants("Data")

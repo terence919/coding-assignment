@@ -57,18 +57,21 @@ namespace CodingAssignment
 
         public static string DisplaySearchInfo(string inputKey,  List<string> filesNames)
         {
-            foreach (var file in filesNames)
+            var fileUtility = new FileUtility(new FileSystem());
+            foreach (var fileName in filesNames)
             {
-                var dataList = GetDataList(file);
-                var foundData = dataList.FirstOrDefault(data =>
-                    !string.IsNullOrEmpty(data.Key) &&
-                    string.Equals(data.Key, inputKey.Trim(), StringComparison.OrdinalIgnoreCase));
-
-                if (string.IsNullOrEmpty(foundData.Key)) continue;
-                var marker = "data" + Path.DirectorySeparatorChar; 
-                var index = file.LastIndexOf(marker, StringComparison.OrdinalIgnoreCase);
-                var relativePath = file.Substring(index);
-                return $"Key:{foundData.Key} Value:{foundData.Value} FileName:{relativePath}";
+                var result = fileUtility.GetExtension(fileName) switch
+                {
+                    ".csv" => new CsvContentParser().Search(fileName, inputKey),
+                    ".json" => new JsonContentParser().Search(fileName, inputKey),
+                    ".xml" => new XmlContentParser().Search(fileName, inputKey),
+                    _ => "Search not found."
+                };
+                
+                if (!string.IsNullOrEmpty(result))
+                {
+                    return result;
+                }
             }
             return "Search not found.";
         }
@@ -118,7 +121,7 @@ namespace CodingAssignment
             Console.WriteLine("Enter the key to search.");
     
             var inputKey = Console.ReadLine()!;
-            var displayInfo = DisplaySearchInfo(inputKey, filesNames); 
+            var displayInfo = DisplaySearchInfo(inputKey.Trim(), filesNames); 
             
             Console.WriteLine($"{displayInfo}");
         }
