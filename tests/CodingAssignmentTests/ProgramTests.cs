@@ -45,11 +45,11 @@ public class ProgramTests
     {
         var filePath = Path.Combine(_rootPath, "MockData", "data");
         var allDataList = CodingAssignment.Program.GetAllFilesName(filePath);
-        var searchJsonInfo = CodingAssignment.Program.DisplaySearchInfo("abc ", allDataList);
+        var searchJsonInfo = CodingAssignment.Program.DisplaySearchInfo("abc", allDataList);
         Assert.That(searchJsonInfo, Is.EqualTo("Key:aBc Value:123 FileName:data/data2.json"));
-        var searchCsvInfo = CodingAssignment.Program.DisplaySearchInfo("aaa ", allDataList);
+        var searchCsvInfo = CodingAssignment.Program.DisplaySearchInfo("aaa", allDataList);
         Assert.That(searchCsvInfo, Is.EqualTo("Key:aaa Value:bbb FileName:data/data2.csv"));
-        var searchXmlInfo = CodingAssignment.Program.DisplaySearchInfo("hhh ", allDataList);
+        var searchXmlInfo = CodingAssignment.Program.DisplaySearchInfo("hhh", allDataList);
         Assert.That(searchXmlInfo, Is.EqualTo("Key:Hhh Value:555 FileName:data/data2.xml"));
     }
     
